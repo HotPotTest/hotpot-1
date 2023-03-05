@@ -29,7 +29,7 @@ const Trailer = ({row_title}) => {
     <>
         <div className="row-title">
         <h3 className="text-left">{row_title}</h3>
-          <div className="card-container" ref={ref}>
+          <div className="" ref={ref}>
               {/* {data.map(el =>  */}
               <TrailerCard
                   key="1"
@@ -48,3 +48,5 @@ const Trailer = ({row_title}) => {
 }
 
 export default Trailer
+
+
