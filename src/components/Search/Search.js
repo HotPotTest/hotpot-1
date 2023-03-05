@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from "react-router-dom";
 import Card from './Searchcard/Card';
-
+import './Search.css'
 const Search = () => {
     const [text, setText] = useState("");
     const [data, setData] = useState([]);
@@ -24,7 +24,7 @@ const Search = () => {
     }
     return (
         <>
-            <div>
+            <div >
                 <div className="searchinput">
                     <input 
                     className="hotstarSearch"

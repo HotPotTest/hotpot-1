@@ -1,10 +1,8 @@
 .main{
-    justify-content: center;
-    align-items: center;
-    padding: 32px;
+
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
   }
   
   .popup{
@@ -52,7 +50,6 @@
   
   .text{
     margin-left: 10%;
-    margin-top: 70px;
   }
   .input-div{
     display: flex;
@@ -75,6 +72,14 @@
     margin-top: 8px;
     border-radius: 7px;
     margin-left: 4px;
+    border:0;
+    width:70%;
+   
+  }
+  .button-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .otp-inp{

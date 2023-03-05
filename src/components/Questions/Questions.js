@@ -26,10 +26,8 @@ export const Questions = ({row_title}) => {
     useEffect(() => { getData() }, [id,category])
   return (
     <>
-        <div className="row-title text-left">
           <h3 className="text-left">{row_title}</h3>
           <QuestionCard />
-        </div>
     </>
   )
 }

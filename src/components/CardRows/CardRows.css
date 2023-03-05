@@ -1,7 +1,6 @@
 
 .card-container{
     display: flex;
-    height: 310px;
     gap: 10px;
     overflow: scroll;
     align-items: center;   
@@ -26,7 +25,6 @@
 @media only screen and (max-width:667px) {
     .card-container{
         display: flex;
-        height: 170px;
         gap: 10px;
         overflow: scroll;
         align-items: center;   
@@ -48,7 +46,6 @@
 @media only screen and (min-width:768px) and (max-width:1024px){
     .card-container{
         display: flex;
-        height: 170px;
         gap: 10px;
         overflow: scroll;
         align-items: center;   

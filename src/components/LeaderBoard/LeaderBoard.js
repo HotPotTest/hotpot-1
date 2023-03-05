@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal } from '@mui/material';
+import { Box, Button, Modal,Grid } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 const columns = [
@@ -42,7 +42,7 @@ const LeaderBoard = ({row_title}) => {
     };
 
   return (
-    <div className="row-title text-left" style={{ width: 600 }}>
+    <div className="row-title text-left">
         <h3 className="text-left">{row_title}
 
         <Button size="small" onClick={handleOpen} style={{ float: "right" }} variant="contained" startIcon={<PlayCircleOutlineIcon />}>
@@ -61,7 +61,9 @@ const LeaderBoard = ({row_title}) => {
                 </p>
                 </Box>
             </Modal>
-        <div style={{ height: 400, width: 600 }}>
+            <Grid container spacing={5}>
+        <Grid item xs={12} md={12}>
+        <div style={{ height: 400}}>
         <DataGrid
             rows={rows}
             columns={columns}
@@ -69,6 +71,8 @@ const LeaderBoard = ({row_title}) => {
             rowsPerPageOptions={[5]}
         />
         </div>
+        </Grid>
+        </Grid>
     </div>
   );
 }

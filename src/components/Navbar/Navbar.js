@@ -6,12 +6,18 @@ import { useNavigate } from 'react-router-dom'
 import { Link, useParams } from 'react-router-dom'
 import Search from '../Search/Search'
 import Login from '../Login/Login'
-
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 const Navbar = () => {
   const [ auth, setAuth] = useState(localStorage.getItem('user')? true : false)
   const{category} = useParams()
   const [buttonPopup, setButtonPopup] = useState(false);
   const [otpPopup, setOtpPopup] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const navigate = useNavigate()
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -72,47 +78,38 @@ const Navbar = () => {
           </div>
         </div>
         <div className="nav-right">
-          <Search />         
+          <Search />  
+          <div  onClick={handleOpen}>
+            Login
+          </div>       
         </div>
       </div>
       <div>
-      <Login trigger={buttonPopup} setTrigger={setButtonPopup}>
-        <p style={{
-          fontSize: "18px",
-          wordSpacing: "1.4px"
-        }} className="text">Login to continue</p>
-        <br></br>
-        <div 
-        className="googleBtn">
-          {/* <GoogleLogin
-        clientId={"470082525240-e74jps4n35c7d8kufu3ujo6veg77bi3k.apps.googleusercontent.com"}
-        // clientId="920450409324-dr6oficri8basjuvt765sag2njgub8du.apps.googleusercontent.com"
-        buttonText="Sign In With Google"
-        onSuccess={handleLogin}
-        onFailure={handleFailure}
-        cookiePolicy={'single_host_origin'}
-        /> */}
-        </div>
-        <br></br>
-        <p style={{
-          marginLeft: "45%"
-        }}>or</p>
-        <br></br>
-        <div className="input-div">
-          <p>+91|</p><input type="text" className="input" placeholder="Enter your mobile number" required />
-          <button onClick={() => {
-            setOtpPopup(true);
-            setButtonPopup(false)
-          }} className="otp-btn">send</button>
-        </div>
-      </Login>
-      <Login otpTrigger={otpPopup} setOtpTrigger={setOtpPopup} setTrigger={setButtonPopup}>
-        <p className="text">Enter the OTP</p>
-        <input type="text" className="otp-inp" placeholder="Enter OTP" onKeyDown={handleKeyDown} />
-      </Login>
+      
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Login/>
+               </Box>
+      </Modal>
     </>
   )
 }
 
 export default Navbar
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '0',
+  boxShadow: 24,
+  p: 1,
+};

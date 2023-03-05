@@ -7,6 +7,9 @@ import { Link, useParams } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import { height } from '@mui/system'
+
 const TrailerCard = ({ id, title, description, imageUrl, media_type }) => {
     let baseImgUrl = "http://localhost:3000"; // + imageUrl
     const [data, setData] = useState({});
@@ -30,12 +33,17 @@ const TrailerCard = ({ id, title, description, imageUrl, media_type }) => {
             </div> */}
              <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
-        <iframe width='100%' height='200' src="https://www.youtube.com/embed/_Z3QKkl1WyM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
+        <Grid item xs={12} md={4} sx={{padding:0}}>
+          <Root>
+        <iframe width='100%' height="100%" src="https://www.youtube.com/embed/_Z3QKkl1WyM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </Root>
         </Grid>
-        <Grid item xs={12} md={4}>
-        <iframe width='100%' height='200' src="https://www.youtube.com/embed/RlOB3UALvrQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        <Grid item xs={12} md={4} sx={{padding:0}}>
+        <Root>
+        <iframe  width='100%' height="100%" src="https://www.youtube.com/embed/RlOB3UALvrQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </Root>
+
         </Grid>
         
       </Grid>
@@ -47,3 +55,23 @@ const TrailerCard = ({ id, title, description, imageUrl, media_type }) => {
 }
 
 export default TrailerCard
+
+
+const Root = styled('div')(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.down('md')]: {
+    width:"100%",
+    display:'flex',justifyContent:'center',alignItems:'center',
+    height:'300px'
+  },
+  [theme.breakpoints.up('md')]: {
+    widht:'100%',
+    height:'200px'
+
+  },
+  [theme.breakpoints.up('lg')]: {
+    widht:'100%',
+    height:'200px'
+
+  },
+}));
