@@ -1,7 +1,6 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import './Navbar.css'
 import '../Login/Login.css'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link, useParams } from 'react-router-dom'
 import Search from '../Search/Search'
@@ -9,11 +8,16 @@ import Login from '../Login/Login'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import { IconButton,Menu,MenuItem } from '@mui/material'
 import Modal from '@mui/material/Modal';
 const Navbar = () => {
   const [ auth, setAuth] = useState(localStorage.getItem('user')? true : false)
   const{category} = useParams()
   const [buttonPopup, setButtonPopup] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [isLoggedIn,setIsLoggedIn] = useState(false)
   const [otpPopup, setOtpPopup] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -28,7 +32,16 @@ const Navbar = () => {
       else alert("enter valid")
     }
   }
-  
+  let user = JSON.parse(localStorage.getItem("userCredential"))
+
+  const checkIfLoggedIn = async () => {
+    if (user) {
+      setIsLoggedIn(true)    }
+  };
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, [user]);
+
   const logOutUser = ()=>{
     localStorage.removeItem('user')
     setAuth(false)
@@ -48,8 +61,23 @@ const Navbar = () => {
     // console.log({ failure : err})
     alert(`Login failed`)
   }
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
+  const settings = ['Logout'];
 
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const Logout= () => {
+    localStorage.clear()
+    let user = JSON.parse(localStorage.getItem("userCredential"))
+     if(!user){
+      setIsLoggedIn(false)
+     }
+    handleCloseUserMenu()
+  }
   return (
     <>
       <div className='nav'>
@@ -79,9 +107,14 @@ const Navbar = () => {
         </div>
         <div className="nav-right">
           <Search />  
-          <div  onClick={handleOpen}>
+         {!isLoggedIn ? <div  onClick={handleOpen}>
             Login
-          </div>       
+          </div>:
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+        </IconButton>
+        
+          }       
         </div>
       </div>
       <div>
@@ -94,9 +127,31 @@ const Navbar = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Login/>
+          <Login handleClose={handleClose}/>
                </Box>
       </Modal>
+      <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={()=>{Logout()}}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
     </>
   )
 }

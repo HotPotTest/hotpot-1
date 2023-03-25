@@ -19,7 +19,7 @@ const Cards = ({ id, title, description, imageUrl, media_type }) => {
     }, []);
   return (
     <>
-    <Link to={`/${media_type || "movie"}/${id}`}>
+    <Link to={`/movie/${id}`}>
       <div
         style={{
           backgroundImage: `url(wakanda.jpg)`,
@@ -30,8 +30,8 @@ const Cards = ({ id, title, description, imageUrl, media_type }) => {
         <div className="wrap">
           <div className="card-gradient">
             <div className="card-content">
-              <h3>Wakanda Forever</h3>
-              <p>Black Panther : Wakanda Forever</p>
+              <h3>{title}</h3>
+              <p>{description}</p>
             </div>
           </div>
         </div>

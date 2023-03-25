@@ -3,6 +3,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
+    color:black;
   }
   
   .popup{
@@ -15,7 +16,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    /* color: white; */
     z-index: 1;
   }
   .popup-inner{
@@ -32,7 +33,7 @@
     right: 10px;
     background-color: transparent;
     border: none;
-    color: white;
+    /* color: white; */
   }
   .close-btn:hover{
     cursor: pointer;
@@ -58,7 +59,7 @@
   .input{
     margin-top: 10px;
     background-color: transparent;
-    color: white;
+    /* color: white; */
     height: 30px;
     width: 280px;
     border: none;
@@ -67,7 +68,7 @@
   
   .otp-btn{
     background-color: rgb(10, 56, 102);
-    color:white;
+    /* color:white; */
     height: 38px;
     margin-top: 8px;
     border-radius: 7px;
@@ -85,7 +86,7 @@
   .otp-inp{
     margin-top: 10px;
     background-color: transparent;
-    color: white;
+    /* color: white; */
     height: 30px;
     width: 280px;
     border: none;

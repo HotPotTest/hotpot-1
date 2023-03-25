@@ -9,7 +9,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded'
 import Cards from '../Cards/Cards'
 
-const CardRows = ({row_title, language}) => {
+const CardRows = ({row_title,language, data}) => {
     const ref = useRef(null);
 
     const scroll = (offset) => {
@@ -17,14 +17,14 @@ const CardRows = ({row_title, language}) => {
         ref.current.scrollLeft += offset;
       };
         const{id, category} = useParams()
-        const [data, setData] = useState([])
+        // const [data, setData] = useState([])
       
-        const getData = async () => {
-          const url = id?`https://api.themoviedb.org/3/${category}/${id}/similar?api_key=3d63cba818eb8bc583a23f643a655a3d`:!language?`https://api.themoviedb.org/3/trending/${category=="tv"?"tv":category=="movie"?"movie":"all"}/week?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US`:`https://hotstar-v.herokuapp.com/movies?language=${language}`
-          const a = await axios.get(url)
-          setData(a.data.results)
-        }
-        useEffect(() => { getData() }, [id,category])
+        // const getData = async () => {
+        //   const url = id?`https://api.themoviedb.org/3/${category}/${id}/similar?api_key=3d63cba818eb8bc583a23f643a655a3d`:!language?`https://api.themoviedb.org/3/trending/${category=="tv"?"tv":category=="movie"?"movie":"all"}/week?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US`:`https://hotstar-v.herokuapp.com/movies?language=${language}`
+        //   const a = await axios.get(url)
+        //   setData(a.data.results)
+        // }
+        // useEffect(() => { getData() }, [id,category])
   return (
     <>
     <div className="row-title">
@@ -33,16 +33,16 @@ const CardRows = ({row_title, language}) => {
         <ArrowForwardIosRoundedIcon onClick={()=>{scroll(1700)}} className="right-btn"></ArrowForwardIosRoundedIcon>
         <ArrowBackIosRoundedIcon  onClick={()=>{scroll(-1700)}} className="left-btn"></ArrowBackIosRoundedIcon>
         
-        {/* {data.map(el =>  */}
+        {data?.map(el => 
         <Cards
           key="0"
-          id="0"
-          title="Title"
+          id={el?._id}
+          title={el?.movieName}
           media_type="jpg"
           imageUrl="wakanda.jpg"
-          description={`Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio incidunt voluptas ipsam delectus sequi temporibus.`}
+          description={el?.movieInfo}
         />
-         {/* )} */}
+       )}
         
       </div>
     </div>

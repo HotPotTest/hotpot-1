@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useParams } from "react-router-dom";
 import Banner from '../Banner/Banner'
 import CardRows from '../CardRows/CardRows'
-
+import {GetMovieList} from '../Api/index'
 const MainPage = () => {
   
     const {category,language} = useParams()
@@ -15,7 +15,14 @@ const MainPage = () => {
     useEffect(() => {
       getData()
     }, [category,language]);
-  
+
+    const [movieList,setMovieList] = useState()
+    const GetMoviesList = () => {
+      GetMovieList().then((res)=>setMovieList(res?.data?.movies))
+    }
+    useEffect(()=>{
+      GetMoviesList()
+    },[])
     const getData = () => {
       axios
         .get(
@@ -34,7 +41,8 @@ const MainPage = () => {
       { category: "Movies Recommended For You", language: "te" },
     ];
     let baseImgUrl = 'https://image.tmdb.org/t/p/original'
-
+   console.log(movieList)
+  let PopularMovieList = movieList?.filter((v)=>v.category == 'popular')
   return (
     <>
         <Carousel
@@ -59,7 +67,7 @@ const MainPage = () => {
           />
           {/* ))} */}
       </Carousel>
-      <CardRows row_title={`Trending`} ></CardRows>
+      <CardRows row_title={`Popular`} data={PopularMovieList}></CardRows>
       <CardRows row_title={`Latest`} ></CardRows>
       <CardRows row_title={`TV Series`} ></CardRows>
       <CardRows row_title={`Movies you might follow`} ></CardRows>
