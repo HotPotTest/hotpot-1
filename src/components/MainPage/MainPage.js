@@ -26,8 +26,8 @@ const MainPage = () => {
     const getData = () => {
       axios
         .get(
-          `https://hotstar-v.herokuapp.com/${category || "movies"}?language=${language?language:"en"}`
-        )
+          `https://api.themoviedb.org/3/trending/all/week?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US`
+          )
         .then((res) => {
           setData(res.data.results);
         });
@@ -54,24 +54,23 @@ const MainPage = () => {
             transitionTime={700}
             showThumbs={false}
         >
-        {/* {data.map((el, index) => ( */}
+       {data.map((el, index) => (
           <Banner
-          idm ="0"
-          key="0"
-          img="banner1.jpg"
-        //   img={`${baseImgUrl}${el.backdrop_path}`}
-          title="Infinity War"
-          genre="English"
-          description="On a mission to collect all six Infinity Stones, Thanos plans to use the artifacts to inflict his twisted will on reality. The fate of the planet and existence itself has never been more uncertain as everything the Avengers have fought for has led up to this moment."
-          mediaType = "jpg"
+          idm ={el.id}
+          key={index}
+          img={`${baseImgUrl}${el.backdrop_path}`}
+          title={el.title || el.name}
+          genre={el.genre}
+          description={el.overview}
+          mediaType = {el.media_type}
+          
+          
           />
-          {/* ))} */}
+          ))}
       </Carousel>
-      <CardRows row_title={`Popular`} data={PopularMovieList}></CardRows>
-      <CardRows row_title={`Latest`} ></CardRows>
-      <CardRows row_title={`TV Series`} ></CardRows>
-      <CardRows row_title={`Movies you might follow`} ></CardRows>
-
+      {row_titles.map((el, index) => (
+        <CardRows row_title={el.category} data={PopularMovieList} />
+        ))}
     </>
   )
 }

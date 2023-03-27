@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -17,6 +18,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Grid,TextField,Button} from '@mui/material'
 import Popover from '@mui/material/Popover';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -28,9 +31,9 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const QuestionCard = () => {
+const QuestionCard = ({data}) => {
   const [expanded, setExpanded] = React.useState(false);
-
+  const [postAnswer,setPostAnswer] = useState()
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -43,16 +46,29 @@ const QuestionCard = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+const {id} =  useParams()
+const PostAnswerData = (QID) => {
+  let ans = {
+    whoseQuesId: QID, 
+    whoseMovieId: "63f980fd27519651d886cc76", 
+    answeredByWhichUser: "640484d5cb891647dcff7040",
+    contentAns:postAnswer,
+    spoiler:"false"
+  }
+ 
+axios.post('http://localhost:8000/api/v1/answer/postAnswer',ans).then((res)=>{
+  console.log(res)
+})
+}
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const idData = open ? 'simple-popover' : undefined;
   return (
     <>
-        <Grid xs={12} md={12} sx={{padding:0}}>
+        <Grid xs={12} md={12} sx={{padding:0,margin:'20px 0px'}}>
           <Card style={{padding:"0px !important",textAlign:'left'}}>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
                   R
                 </Avatar>
               }
@@ -66,9 +82,7 @@ const QuestionCard = () => {
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to cook
-                together with your guests. Add 1 cup of frozen peas along with the mussels,
-                if you like.
+                {data?.content}
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -101,16 +115,18 @@ const QuestionCard = () => {
           multiline
           minRows={3}
           maxRows={10}
+          onChange={(e)=>setPostAnswer(e.target.value)}
         />                  </CardContent>
                   <CardActions sx={{display:"flex",alignItems:'right',justifyContent:'right', marginRight:'7px'}}>
-                  <Button size="small" variant="contained">Post</Button>
+                  <Button size="small"  type="submit" onClick={()=>PostAnswerData(data?._id)} variant="contained">Post</Button>
                   </CardActions>
                 </Card>
-                <Card sx={{  marginTop: '10px' }}>
+                { data?.answers && data?.answers?.length && data?.answers?.map((el)=>
+                <>{el?.contentAns ?<Card sx={{  marginTop: '10px' }}>
                   <CardHeader
                     avatar={
-                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        K
+                      <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
+                        {(el?.answeredByWhichUser[0]?.userName)?.charAt(0)}
                       </Avatar>
                     }
                     action={
@@ -118,14 +134,12 @@ const QuestionCard = () => {
                         <MoreVertIcon />
                       </IconButton>
                     }
-                    title="Kanika Arora"
+                    title={el?.answeredByWhichUser[0]?.userName}
                     subheader="22-Feb-2023 01:49AM"
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                      This impressive paella is a perfect party dish and a fun meal to cook
-                      together with your guests. Add 1 cup of frozen peas along with the mussels,
-                      if you like.
+                      {el?.contentAns}
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing>
@@ -137,45 +151,13 @@ const QuestionCard = () => {
                     </IconButton>
                   </CardActions>
                 </Card>
-
-                <Card sx={{  marginTop: '10px' }}>
-                  <CardHeader
-                    avatar={
-                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        D
-                      </Avatar>
-                    }
-                    action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    title="Deepti Gatne"
-                    subheader="22-Feb-2023 02:15AM"
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      This impressive paella is a perfect party dish and a fun meal to cook
-                      together with your guests. Add 1 cup of frozen peas along with the mussels,
-                      if you like.
-                    </Typography>
-                  </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="like">
-                      <ThumbUpOffAltIcon />
-                    </IconButton>
-                    <IconButton aria-label="dislike">
-                      <ThumbDownOffAltIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-
+:""}</>)}
               </CardContent>
             </Collapse>
           </Card>
         </Grid>
         <Popover
-        id={id}
+        id={idData}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}

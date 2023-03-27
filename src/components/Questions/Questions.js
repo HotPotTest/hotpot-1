@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import './Questions.css'
 import QuestionCard from '../Cards/QuestionCard'
-
+import {GetQuesionByMovies} from '../Api/index'
 
 export const Questions = ({row_title}) => {
   const ref = useRef(null);
@@ -16,18 +16,20 @@ export const Questions = ({row_title}) => {
   };
     const{id, category} = useParams()
     const [data, setData] = useState([])
-
+    useEffect(() => { getData() }, [id])
     const getData = async () => {
-      const url = '';
-      const a = await axios.get(url)
-      setData(a.data.results)
+      GetQuesionByMovies({id}).then((res)=>{
+      setData(res?.data?.result)
+    })
     }
-  //   let baseImgUrl = "http://localhost:3000/wakanda.jpg";
-    useEffect(() => { getData() }, [id,category])
+    console.log("datadatadatadata",data)
+ 
   return (
     <>
           <h3 className="text-left">{row_title}</h3>
-          <QuestionCard />
+          {data?.map((el)=>
+          <QuestionCard data={el}/>
+          )}
     </>
   )
 }

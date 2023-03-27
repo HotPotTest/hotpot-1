@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from "react-router-dom";
 import Card from './Searchcard/Card';
+import axios from 'axios';
 import './Search.css'
 const Search = () => {
     const [text, setText] = useState("");
@@ -13,7 +14,16 @@ const Search = () => {
             setData([]);
             return;
         }
-      };
+        await axios
+      .get(
+        `http://localhost:8000/api/v1/movies/searchMovie?${text}`
+      )
+      .then((res) => {
+        console.log("res",res.data?.data?.movies)
+
+        setData(res.data?.data?.movies);
+      });
+  };
     useEffect(() => {
         datafn();
       }, [text]);
@@ -22,24 +32,28 @@ const Search = () => {
         setData([]);
         setText("");
     }
+    console.log("data",data)
     return (
         <>
             <div >
                 <div className="searchinput">
                     <input 
+
                     className="hotstarSearch"
                     type="text"
+                    onInput={(e) => setText(e.target.value)}
+
                     placeholder="Search"
                     />
                     <div>
                     {text===""? <SearchIcon />:< CloseIcon id="clearBtn" onClick={clearBtn} /> }
                     </div>
                 </div>
-                {data.length!=0 && 
+                { data && data?.length!= 0 && 
                 <div id="searchBox">
                     {data.map((el) => (
-                        <Link to="" onClick={clearBtn}>
-                        <Card path="Path" title="Title" />
+                        <Link to={`/movie/${el._id}`} onClick={clearBtn}>
+                          <Card path={"dysn"} title={el.movieName} />
                         </Link>
                     ))}
                 </div>

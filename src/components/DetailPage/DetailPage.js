@@ -14,15 +14,14 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import {GetMovieList} from '../Api/index'
+import {GetMovieListByID} from '../Api/index'
 const DetailPage = (props) => {
   const {id, category} = useParams();
   useEffect(() => { getData() }, [id])
   const [data, setData] = useState({})
   const getData = async () => {
-    GetMovieList().then((res)=>{
-    let DataID = res?.data?.movies.filter((v)=>v._id == id)
-    setData(DataID[0])
+    GetMovieListByID({id}).then((res)=>{
+    setData(res?.data?.movieDetail)
   })
   }
   console.log(data)
@@ -38,15 +37,17 @@ const DetailPage = (props) => {
   return (
     <>
     <div key={props.pageId}>
-      <Banner original_title={data.movieName} id={id}  img={`${baseImgUrl}${'banner1.jpg'}`} title={data.movieName || data.movieName} description={data.movieInfo   }></Banner>
+      <Banner original_title={data.movieName} id={id}  img={`${baseImgUrl}${'banner1.jpg'}`} title={data.movieName} description={data.movieInfo   }></Banner>
       {/* <DirectorCasts row_title="Directors & Casts"></DirectorCasts>
       <Trailer row_title="Trailers & Other"></Trailer>
       <div style={{display:'flex', flexDirection: 'row'}}>
         <Questions row_title="Questions & Answers"></Questions>
         <LeaderBoard row_title="Leader Board"> </LeaderBoard>
       </div> */}
-      <Container>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"  variant="scrollable"
+      <Container sx={{marginTop:"50px"}}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"  variant="scrollable" 
+
+
             scrollButtons="auto">
           <Tab label="Questions & Answers" {...a11yProps(0)} />
           <Tab label="Leader Board" {...a11yProps(1)} />
