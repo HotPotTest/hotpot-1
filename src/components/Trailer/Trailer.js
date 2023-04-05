@@ -8,7 +8,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import TrailerCard from '../Cards/TrailerCard';
 
-const Trailer = ({row_title}) => {
+const Trailer = ({row_title, trailer}) => {
   const ref = useRef(null);
   const scroll = (offset) => {
     console.log(ref.current)
@@ -16,7 +16,6 @@ const Trailer = ({row_title}) => {
   };
     const{id, category} = useParams()
     const [data, setData] = useState([])
-
     const getData = async () => {
       const url = '';
       const a = await axios.get(url)
@@ -31,7 +30,8 @@ const Trailer = ({row_title}) => {
         <h3 className="text-left">{row_title}</h3>
           <div className="" ref={ref}>
               {/* {data.map(el =>  */}
-              <TrailerCard
+              <TrailerCard 
+                  videoKey={trailer}
                   key="1"
                   id="1"
                   title="Cast"

@@ -35,11 +35,12 @@ const CardRows = ({row_title,language, data}) => {
         
         {data?.map(el => 
         <Cards
+          image={el?.movieBannerSmall}
           key="0"
           id={el?._id}
           title={el?.movieName}
           media_type="jpg"
-          imageUrl="wakanda.jpg"
+          imageUrl={el?.movieBannerSmall}
           description={el?.movieInfo}
         />
        )}

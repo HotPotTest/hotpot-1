@@ -26,7 +26,7 @@ const DetailPage = (props) => {
   }
   console.log(data)
 
-  let baseImgUrl = 'http://localhost:3000/'
+  let baseImgUrl = '/images/'
 //   let baseImgUrl = 'https://image.tmdb.org/t/p/original'
   console.log("data is not coming",data);
   const [value, setValue] = React.useState(0);
@@ -37,7 +37,7 @@ const DetailPage = (props) => {
   return (
     <>
     <div key={props.pageId}>
-      <Banner original_title={data.movieName} id={id}  img={`${baseImgUrl}${'banner1.jpg'}`} title={data.movieName} description={data.movieInfo   }></Banner>
+      <Banner original_title={data.movieName} id={id}  img={`${baseImgUrl}${data.movieBanner}`} title={data.movieName} description={data.movieInfo   }></Banner>
       {/* <DirectorCasts row_title="Directors & Casts"></DirectorCasts>
       <Trailer row_title="Trailers & Other"></Trailer>
       <div style={{display:'flex', flexDirection: 'row'}}>
@@ -65,7 +65,7 @@ const DetailPage = (props) => {
       <DirectorCasts row_title="Directors & Casts"></DirectorCasts>
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <Trailer row_title="Trailers & Other"></Trailer>
+      <Trailer row_title="Trailers & Other" trailer={data?.trailer}></Trailer>
       </TabPanel>
 </Container>
     </div>

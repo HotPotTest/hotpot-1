@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { height } from '@mui/system'
 
-const TrailerCard = ({ id, title, description, imageUrl, media_type }) => {
+const TrailerCard = ({ id, title, description, imageUrl, media_type, videoKey }) => {
     let baseImgUrl = "http://localhost:3000"; // + imageUrl
     const [data, setData] = useState({});
     const getData = async () => {
@@ -35,17 +35,9 @@ const TrailerCard = ({ id, title, description, imageUrl, media_type }) => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4} sx={{padding:0}}>
           <Root>
-        <iframe width='100%' height="100%" src="https://www.youtube.com/embed/_Z3QKkl1WyM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </Root>
+            <iframe width='100%' height="100%" src={`https://www.youtube.com/embed/${videoKey[0]}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </Root>
         </Grid>
-
-        <Grid item xs={12} md={4} sx={{padding:0}}>
-        <Root>
-        <iframe  width='100%' height="100%" src="https://www.youtube.com/embed/RlOB3UALvrQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </Root>
-
-        </Grid>
-        
       </Grid>
     </Box>
 

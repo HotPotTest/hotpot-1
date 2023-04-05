@@ -16,13 +16,19 @@ const MainPage = () => {
       getData()
     }, [category,language]);
 
-    const [movieList,setMovieList] = useState()
+    const [movieList, setMovieList] = useState()
+    
     const GetMoviesList = () => {
       GetMovieList().then((res)=>setMovieList(res?.data?.movies))
     }
+
+
     useEffect(()=>{
       GetMoviesList()
+
     },[])
+
+
     const getData = () => {
       axios
         .get(
@@ -34,15 +40,16 @@ const MainPage = () => {
     };
   
     const row_titles = [
-      { category: "Popular Shows", language: "en" },
-      { category: "Latest & Trending", language: "hi" },
-      { category: "Shows Recommended For You", language: "ta" },
-      { category: "Action", language: "ml" },
-      { category: "Movies Recommended For You", language: "te" },
+      { category: "Popular", language: "en" },
+      { category: "Top Rated", language: "en" },
+      { category: "Movies You Might Follow", language: "en" },
     ];
     let baseImgUrl = 'https://image.tmdb.org/t/p/original'
    console.log(movieList)
+
   let PopularMovieList = movieList?.filter((v)=>v.category == 'popular')
+  let topRatedMovieList = movieList?.filter((v)=>v.category == 'topRated')
+  
   return (
     <>
         <Carousel
@@ -63,14 +70,13 @@ const MainPage = () => {
           genre={el.genre}
           description={el.overview}
           mediaType = {el.media_type}
-          
-          
           />
           ))}
       </Carousel>
-      {row_titles.map((el, index) => (
-        <CardRows row_title={el.category} data={PopularMovieList} />
-        ))}
+
+      <CardRows row_title={'Popular'} data={PopularMovieList} />
+      <CardRows row_title={'Top Rated'} data={topRatedMovieList} />
+  
     </>
   )
 }

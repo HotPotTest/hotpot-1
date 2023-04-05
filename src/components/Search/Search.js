@@ -53,7 +53,7 @@ const Search = () => {
                 <div id="searchBox">
                     {data.map((el) => (
                         <Link to={`/movie/${el._id}`} onClick={clearBtn}>
-                          <Card path={"dysn"} title={el.movieName} />
+                          <Card path={"dysn"} title={el.movieName} image={el?.movieBannerSmall} />
                         </Link>
                     ))}
                 </div>

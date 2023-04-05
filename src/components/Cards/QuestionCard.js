@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -33,6 +34,10 @@ const ExpandMore = styled((props) => {
 
 const QuestionCard = ({data}) => {
   const [expanded, setExpanded] = React.useState(false);
+  const [like,setLike] = useState(false)
+  const handleLike = ()=> {
+    setLike(!like)
+  } 
   const [postAnswer,setPostAnswer] = useState()
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -55,8 +60,17 @@ const PostAnswerData = (QID) => {
     contentAns:postAnswer,
     spoiler:"false"
   }
- 
-axios.post('http://localhost:8000/api/v1/answer/postAnswer',ans).then((res)=>{
+
+const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Access-Control-Allow-Origin': '*'
+};
+axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.post(
+  '/api/v1/answer/postAnswer',
+  ans,headers
+  ).then((res)=>{
   console.log(res)
 })
 }
@@ -106,17 +120,16 @@ axios.post('http://localhost:8000/api/v1/answer/postAnswer',ans).then((res)=>{
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
               <Card sx={{  marginTop: '10px' }}>
-                  
                   <CardContent sx={{paddingBottom:'0px'}}>
                     <TextField
                     sx={{width:"100%"}}
-          id="outlined-multiline-flexible"
-          label="Write your answer"
-          multiline
-          minRows={3}
-          maxRows={10}
-          onChange={(e)=>setPostAnswer(e.target.value)}
-        />                  </CardContent>
+                    id="outlined-multiline-flexible"
+                    label="Write your answer"
+                    multiline
+                    minRows={3}
+                    maxRows={10}
+                    onChange={(e)=>setPostAnswer(e.target.value)}
+                  />                  </CardContent>
                   <CardActions sx={{display:"flex",alignItems:'right',justifyContent:'right', marginRight:'7px'}}>
                   <Button size="small"  type="submit" onClick={()=>PostAnswerData(data?._id)} variant="contained">Post</Button>
                   </CardActions>
@@ -143,8 +156,8 @@ axios.post('http://localhost:8000/api/v1/answer/postAnswer',ans).then((res)=>{
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing>
-                    <IconButton aria-label="like">
-                      <ThumbUpOffAltIcon />
+                    <IconButton aria-label="like" onClick={handleLike}>
+                     {like ?<ThumbUpIcon/> : <ThumbUpOffAltIcon /> }
                     </IconButton>
                     <IconButton aria-label="dislike">
                       <ThumbDownOffAltIcon />
