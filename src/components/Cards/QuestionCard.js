@@ -20,6 +20,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Grid,TextField,Button} from '@mui/material'
 import Popover from '@mui/material/Popover';
 import axios from 'axios';
+import {GetAnsByQuesionID} from '../Api/index'
 import CustomizedSnackbars from '../Toast/Toast'
 
 import { useParams } from 'react-router-dom';
@@ -36,7 +37,7 @@ const ExpandMore = styled((props) => {
 
 
 
-const QuestionCard = ({data}) => {
+const QuestionCard = ({data,movieID,userID}) => {
   const [expanded, setExpanded] = React.useState(false);
   const [like,setLike] = useState(false)
   const handleLike = ()=> {
@@ -44,6 +45,7 @@ const QuestionCard = ({data}) => {
   } 
   const [isLoggedIn,setIsLoggedIn] = useState(false)
   const [postAnswer,setPostAnswer] = useState()
+  const [AnsData,setAnsData] = useState()
   const [showMessage, setShowMessage] = useState({
     message: "",
     visible: false,
@@ -58,7 +60,13 @@ const QuestionCard = ({data}) => {
   useEffect(() => {
     checkIfLoggedIn();
   }, [user]);
-  const handleExpandClick = () => {
+  const getAnswer=(id)=>{
+    GetAnsByQuesionID({id}).then((res)=>{
+      setAnsData(res)
+    })
+  }
+  const handleExpandClick = (id) => {
+    getAnswer(id)
     setExpanded(!expanded);
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -72,18 +80,17 @@ const QuestionCard = ({data}) => {
   };
 const {id} =  useParams()
 const PostAnswerData = (QID) => {
-  debugger
   if(!isLoggedIn){
     setShowMessage({
-      message: "Please login for post answer",
+      message: "Please login first to post answer",
       visible: true,
       type: "error",
     });
   }
   let ans = {
     whoseQuesId: QID, 
-    whoseMovieId: "63f980fd27519651d886cc76", 
-    answeredByWhichUser: "640484d5cb891647dcff7040",
+    whoseMovieId: movieID, 
+    answeredByWhichUser: userID,
     contentAns:postAnswer,
     spoiler:"false"
   }
@@ -99,6 +106,13 @@ axios.post(
   ans,headers
   ).then((res)=>{
   console.log(res)
+  getAnswer(QID)
+  setPostAnswer("")
+  setShowMessage({
+    message: "Answer Posted",
+    visible: true,
+    type: "success",
+  });
 })
 }
   const open = Boolean(anchorEl);
@@ -136,7 +150,7 @@ axios.post(
               <IconButton aria-label="dislike">
                 <ExpandMore
                   expand={expanded}
-                  onClick={handleExpandClick}
+                  onClick={()=>handleExpandClick(data?._id)}
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
@@ -154,6 +168,7 @@ axios.post(
                     label="Write your answer"
                     multiline
                     minRows={3}
+                    value={postAnswer}
                     maxRows={10}
                     onChange={(e)=>setPostAnswer(e.target.value)}
                   />                  </CardContent>
@@ -161,40 +176,7 @@ axios.post(
                   <Button size="small"  type="submit" onClick={()=>PostAnswerData(data?._id)} variant="contained">Post</Button>
                   </CardActions>
                 {/* </Card> */}
-                {/* { data?.answers && data?.answers?.length && data?.answers?.map((el)=>
-                <>
-                {el?.contentAns ?
-                <>
-                  <CardHeader
-                    avatar={
-                      <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
-                        {(el?.answeredByWhichUser[0]?.userName)?.charAt(0)}
-                      </Avatar>
-                    }
-                    action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    title={el?.answeredByWhichUser[0]?.userName}
-                    subheader="22-Feb-2023 01:49AM"
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      {el?.contentAns}
-                    </Typography>
-                  </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="like" onClick={handleLike}>
-                     {like ?<ThumbUpIcon/> : <ThumbUpOffAltIcon /> }
-                    </IconButton>
-                    <IconButton aria-label="dislike">
-                      <ThumbDownOffAltIcon />
-                    </IconButton>
-                  </CardActions>
-                  <hr></hr>
-                  </>
-:""}</>)} */}
+                  <AnsCard AnsData={AnsData} handleLike={handleLike}/>
               </CardContent>
             </Collapse>
           </Card>
@@ -227,4 +209,42 @@ axios.post(
 export default QuestionCard 
 
 
-const AnsCa
+const AnsCard = ({AnsData,handleLike,like}) => {
+  console.log("AnsData",AnsData)
+return(<>
+              { AnsData?.data && AnsData?.data?.answer && AnsData?.data?.answer?.length && AnsData?.data?.answer?.map((el)=>
+                <>
+                {el?.contentAns ?
+                <>
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
+                        {(el?.answeredByWhichUser && el?.answeredByWhichUser[0]?.userName)?.charAt(0)}
+                      </Avatar>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={el?.answeredByWhichUser && el?.answeredByWhichUser[0]?.userName}
+                    subheader="22-Feb-2023 01:49AM"
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      {el?.contentAns}
+                    </Typography>
+                  </CardContent>
+                  <CardActions disableSpacing>
+                    <IconButton aria-label="like" onClick={handleLike}>
+                     {like ?<ThumbUpIcon/> : <ThumbUpOffAltIcon /> }
+                    </IconButton>
+                    <IconButton aria-label="dislike">
+                      <ThumbDownOffAltIcon />
+                    </IconButton>
+                  </CardActions>
+                  <hr></hr>
+                  </>
+:""}</>)} 
+</>)
+}

@@ -19,6 +19,10 @@ export async function GetQuesionByMovies({id}) {
   const { data } = await axios.get( `${API_URL}/api/v1/movies/quesAns/${id}`);
   return data;
 }
+export async function GetAnsByQuesionID({id}) {
+  const { data } = await axios.get( `${API_URL}/api/v1/movies/${id}/getAnswer`);
+  return data;
+}
 
 //LeaderBoard 
 
