@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { IconButton,Menu,MenuItem } from '@mui/material'
 import Modal from '@mui/material/Modal';
+import CustomizedSnackbars from '../Toast/Toast'
+import Signup from '../Login/Signup'
 const Navbar = () => {
   const [ auth, setAuth] = useState(localStorage.getItem('user')? true : false)
   const{category} = useParams()
@@ -20,6 +22,14 @@ const Navbar = () => {
   const [isLoggedIn,setIsLoggedIn] = useState(false)
   const [otpPopup, setOtpPopup] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    visible: false,
+    type: "success",
+  });
+  const [openLogin, setOpenLogin] = React.useState(false);
+  const openLoginModal = () => setOpenLogin(true);
+  const CloseLoginModal = () => setOpenLogin(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const navigate = useNavigate()
@@ -32,7 +42,7 @@ const Navbar = () => {
       else alert("enter valid")
     }
   }
-  let user = JSON.parse(localStorage.getItem("userCredential"))
+  let user = JSON.parse(localStorage.getItem("user"))
 
   const checkIfLoggedIn = async () => {
     if (user) {
@@ -84,7 +94,7 @@ const Navbar = () => {
         <div className="nav-left">
           <div>
             <Link to="/">
-              <p><b>HotPot</b></p>
+              <p className='m-0'><b>HotPot</b></p>
               {/* <img
                 className="disney-img"
                 src="https://secure-media.hotstarext.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg"
@@ -107,11 +117,11 @@ const Navbar = () => {
         </div>
         <div className="nav-right">
           <Search />  
-         {!isLoggedIn ? <div  onClick={handleOpen}>
+         {!isLoggedIn ? <div  onClick={openLoginModal}>
             Login
           </div>:
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Avatar alt={user?.data?.user?.firstName} src="/static/images/avatar/2.jpg"  sx={{color:'purple'}}/>
         </IconButton>
         
           }       
@@ -127,7 +137,17 @@ const Navbar = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Login handleClose={handleClose}/>
+          <Signup handleClose={handleClose} openLoginModal={openLoginModal} setShowMessage={setShowMessage}/>
+               </Box>
+      </Modal>
+      <Modal
+        open={openLogin}
+        onClose={CloseLoginModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Login openSignUpModal={handleOpen} handleClose={CloseLoginModal} setShowMessage={setShowMessage}/>
                </Box>
       </Modal>
       <Menu
@@ -152,6 +172,12 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </Menu>
+            {showMessage.visible && (
+        <CustomizedSnackbars
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+        />
+      )}
     </>
   )
 }
@@ -166,5 +192,5 @@ const style = {
   bgcolor: 'background.paper',
   border: '0',
   boxShadow: 24,
-  p: 1,
+  p: 3,
 };

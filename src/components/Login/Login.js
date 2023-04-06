@@ -1,104 +1,87 @@
-import React,{useState} from 'react'
-import { signInWithEmailAndPassword,createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import React,{useEffect} from 'react'
+import { TextField,Button } from "@mui/material"
+import { useFormik } from 'formik'
 
-const Login = ({handleClose}) => {
-  const [open,setOpen] = useState(false)
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-const openSignUp= () => {
-  setOpen(true)
-  setEmail("")
-  setPassword("")
-}
-const openSignIn = () => {
-  setOpen(false)
-  setEmail("")
-  setPassword("")
-}
-  const signIn = (e) => {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        if(userCredential){
-          localStorage.setItem("userCredential",JSON.stringify(userCredential))
-        }
-        console.log(userCredential);
-        handleClose()
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const signUp = (e) => {
-    e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  return (
-    <div className='main'>
-      {!open ? 
-      <form onSubmit={signIn}>
-     <>
-      <p style={{
-          fontSize: "18px",
-          wordSpacing: "1.4px"
-        }} className="text">Login</p>
+import * as Yup from 'yup';
+import { async } from '@firebase/util';
+import axios from 'axios';
+
+const Signup = ({openSignUpModal,handleClose,setShowMessage}) => {
+
+
+    const validation = Yup.object({
       
-        <div className="input-div">
-          <input type="email" className="input" placeholder="Enter Email Address" required
-          onChange={(e)=>setEmail(e.target.value)}
-          />
-        </div>
-        <div className="input-div">
-          <input type="password" className="input" placeholder="Enter Password" required
-            onChange={(e)=>setPassword(e.target.value)}
+        email: Yup.string().email('Invalid email address').required('Required'),
+        password: Yup.string().required('Password is required'),
+    })
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: validation,
+        onSubmit:async (values) => {
+            try{
+                const data = await axios.post("api/v1/user/login",values).then((res)=>{
+                 console.log(res.data)
+                 localStorage.setItem("user",JSON.stringify(res.data))
+                 handleClose()
+                 setShowMessage({
+                    message: "User Logged In  Successfully",
+                    visible: true,
+                    type: "success",
+                  });
+                })
+            }catch{
 
-          />
-        </div>
-        <div className='button-wrapper'>
-        <button type="submit"
-           className="otp-btn">Submit</button>
-          </div>
- <p onClick={openSignUp}>Click here to sign Up</p>      
-          </>
-          
-          </form> :
-          <form onSubmit={signUp}>
-          <>
-           <p style={{
-               fontSize: "18px",
-               wordSpacing: "1.4px"
-             }} className="text">Signup</p>
-           
-             <div className="input-div">
-               <input type="email" className="input" placeholder="Enter Email Address" required
-               onChange={(e)=>setEmail(e.target.value)}
-               />
-             </div>
-             <div className="input-div">
-               <input type="password" className="input" placeholder="Enter Password" required
-                 onChange={(e)=>setPassword(e.target.value)}
-     
-               />
-             </div>
-             <div className='button-wrapper'>
-             <button type="submit"
-                className="otp-btn">Submit</button>
-               </div>
-      <p onClick={openSignIn}>Click here to Login</p>      
-               </>
+            }
+        },
+    })
+    return (
+        <div>
+            <div><h2 style={{ textAlign: 'center' }}> Login </h2></div>
+            <form onSubmit={formik.handleSubmit}>
+
                
-               </form>}
+                
+                <div className='mb-3'>
+                    <TextField 
+                     id="outlined-basic" 
+                     label="Email"
+                     name='email'
+                     variant="outlined"
+                     fullWidth size='small' 
+                     onChange={formik.handleChange}
+                     onBlur={formik.handleBlur}
+                     />
 
-   
-    </div>
-  )
+                    {formik.touched.email && formik.errors.email ? (
+                        <div>{formik.errors.email}</div>
+                    ) : null}
+
+                </div>
+                <div className='mb-3'>
+                    <TextField 
+                     id="outlined-basic" 
+                     label="Password"
+                     name='password'
+                     variant="outlined"
+                     fullWidth size='small' 
+                     onChange={formik.handleChange}
+                     onBlur={formik.handleBlur}
+                     />
+
+                    {formik.touched.password && formik.errors.password ? (
+                        <div>{formik.errors.password}</div>
+                    ) : null}
+
+                </div>
+                              <Button  type='submit' variant="contained" fullWidth>Submit</Button>
+            </form>
+            <h6 className='mt-3 text-center text-primary ' onClick={()=>{handleClose() ;openSignUpModal()}}><u>Sign up for hotpot?</u></h6>
+        </div>
+
+    )
 }
 
-export default Login
+export default Signup

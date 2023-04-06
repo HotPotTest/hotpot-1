@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -20,6 +20,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Grid,TextField,Button} from '@mui/material'
 import Popover from '@mui/material/Popover';
 import axios from 'axios';
+import CustomizedSnackbars from '../Toast/Toast'
+
 import { useParams } from 'react-router-dom';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,13 +34,30 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+
+
 const QuestionCard = ({data}) => {
   const [expanded, setExpanded] = React.useState(false);
   const [like,setLike] = useState(false)
   const handleLike = ()=> {
     setLike(!like)
   } 
+  const [isLoggedIn,setIsLoggedIn] = useState(false)
   const [postAnswer,setPostAnswer] = useState()
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    visible: false,
+    type: "success",
+  });
+  let user = JSON.parse(localStorage.getItem("user"))
+  
+  const checkIfLoggedIn = async () => {
+    if (user) {
+      setIsLoggedIn(true)    }
+  };
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, [user]);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -53,6 +72,14 @@ const QuestionCard = ({data}) => {
   };
 const {id} =  useParams()
 const PostAnswerData = (QID) => {
+  debugger
+  if(!isLoggedIn){
+    setShowMessage({
+      message: "Please login for post answer",
+      visible: true,
+      type: "error",
+    });
+  }
   let ans = {
     whoseQuesId: QID, 
     whoseMovieId: "63f980fd27519651d886cc76", 
@@ -79,7 +106,7 @@ axios.post(
   return (
     <>
         <Grid xs={12} md={12} sx={{padding:0,margin:'20px 0px'}}>
-          <Card style={{padding:"0px !important",textAlign:'left'}}>
+          <Card style={{padding:"0px !important",textAlign:'left',boxShadow:`0 35px 50px -30px rgba(0, 0, 0, 0.2)`}}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
@@ -119,7 +146,7 @@ axios.post(
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-              <Card sx={{  marginTop: '10px' }}>
+              {/* <Card sx={{  marginTop: '10px' }} > */}
                   <CardContent sx={{paddingBottom:'0px'}}>
                     <TextField
                     sx={{width:"100%"}}
@@ -133,9 +160,11 @@ axios.post(
                   <CardActions sx={{display:"flex",alignItems:'right',justifyContent:'right', marginRight:'7px'}}>
                   <Button size="small"  type="submit" onClick={()=>PostAnswerData(data?._id)} variant="contained">Post</Button>
                   </CardActions>
-                </Card>
-                { data?.answers && data?.answers?.length && data?.answers?.map((el)=>
-                <>{el?.contentAns ?<Card sx={{  marginTop: '10px' }}>
+                {/* </Card> */}
+                {/* { data?.answers && data?.answers?.length && data?.answers?.map((el)=>
+                <>
+                {el?.contentAns ?
+                <>
                   <CardHeader
                     avatar={
                       <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
@@ -163,8 +192,9 @@ axios.post(
                       <ThumbDownOffAltIcon />
                     </IconButton>
                   </CardActions>
-                </Card>
-:""}</>)}
+                  <hr></hr>
+                  </>
+:""}</>)} */}
               </CardContent>
             </Collapse>
           </Card>
@@ -185,8 +215,16 @@ axios.post(
       >
         <Typography sx={{ p: 1 }}>The content of the Popover.</Typography>
       </Popover>
-      
+      {showMessage.visible && (
+        <CustomizedSnackbars
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+        />
+      )}
     </>
   );
 }
 export default QuestionCard 
+
+
+const AnsCa

@@ -26,7 +26,7 @@ export const Questions = ({row_title}) => {
  
   return (
     <>
-          <h3 className="text-left">{row_title}</h3>
+          <h3 className="text-center mt-3 ">{row_title}</h3>
           {data?.map((el)=>
           <QuestionCard data={el}/>
           )}
