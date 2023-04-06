@@ -34,3 +34,12 @@ export async function LeaderBoard() {
   });
   return data;
 }
+
+export async function QuizData(id,token) {
+  const { data } = await axios.get(`/api/v1/quiz/${id}`,{
+    headers: {
+      'Authorization': 'Bearer ' +  token
+    },
+  });
+  return data;
+}

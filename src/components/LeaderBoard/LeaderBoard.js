@@ -3,6 +3,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box, Button, Modal,Grid } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { LeaderBoard } from '../Api';
+import { useParams } from 'react-router-dom'
+import CustomizedSnackbars from '../Toast/Toast'
+
+import Quize from '../Quize/index'
 const columns = [
   { field: 'id', headerName: 'ID',width:100 },
   { field: 'userName', headerName: 'Users',width:200},
@@ -18,31 +22,55 @@ const rows = [
 ];
 
 
+
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
+    width: 800,
+    bgcolor: 'rgb(61, 61, 61)',
+      boxShadow: 24,
+    p: 2,
+    height:400
   };
 
 const LeaderBoardComp = ({row_title}) => {
+  const [isLoggedIn,setIsLoggedIn] = useState(false)
 
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    visible: false,
+    type: "success",
+  });
     const [open, setOpen] = React.useState(false);
     const [Rows,setRows] = useState([])
-    const handleOpen = () => {
-        setOpen(true);
-    };
+    const{id, category} = useParams()
+
+ 
     const handleClose = () => {
         setOpen(false);
     };
+    let user = JSON.parse(localStorage.getItem("user"))
+    const checkIfLoggedIn = async () => {
+      if (user) {
+        setIsLoggedIn(true)    }
+    };
+    useEffect(() => {
+      checkIfLoggedIn();
+    }, [user]);
+    const handleOpen = () => {
+      if(!isLoggedIn){
+        setShowMessage({
+          message: "Please login first to play quize",
+          visible: true,
+          type: "error",
+        });
+      }else{
+        setOpen(true);
 
+      }
+    };
     const GetLeaderBoard = () => {
       LeaderBoard().then((res)=>{
         console.log( "res",res.data)
@@ -84,13 +112,16 @@ const LeaderBoardComp = ({row_title}) => {
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
             >
-                <Box sx={{ ...style, width: 400 }}>
-                <h2 id="parent-modal-title">Start Quiz</h2>
-                <p id="parent-modal-description">
-                    Quiz questions will appear here
-                </p>
+                <Box sx={{ ...style,}}>
+                <Quize id={id} token={user?.token}/>
                 </Box>
             </Modal>
+            {showMessage.visible && (
+        <CustomizedSnackbars
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+        />
+      )}
     </div>
   );
 }

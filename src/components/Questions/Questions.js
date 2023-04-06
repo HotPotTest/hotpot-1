@@ -1,16 +1,15 @@
 import React from 'react'
 import { useEffect, useRef } from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import './Questions.css'
 import {Grid,Button,CardActions,Card,CardContent,TextField} from '@mui/material'
 import QuestionCard from '../Cards/QuestionCard'
 import {GetQuesionByMovies} from '../Api/index'
 import axios from 'axios'
+import {useParams} from 'react-router-dom'
 import CustomizedSnackbars from '../Toast/Toast'
 
 export const Questions = ({row_title}) => {
-
 
   let user = JSON.parse(localStorage.getItem("user"))
   const [isLoggedIn,setIsLoggedIn] = useState(false)
@@ -25,10 +24,10 @@ export const Questions = ({row_title}) => {
     if (user) {
       setIsLoggedIn(true)    }
   };
+  console.log("user",user?.data?.user)
   useEffect(() => {
     checkIfLoggedIn();
   }, [user]);
-   console.log(user?.data?.user?._id)
   const ref = useRef(null);
 
     const{id, category} = useParams()
@@ -47,6 +46,7 @@ export const Questions = ({row_title}) => {
           visible: true,
           type: "error",
         });
+        return
       }
       let ans = {
         whichMovieId:id, 

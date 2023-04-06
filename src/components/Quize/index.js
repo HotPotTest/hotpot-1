@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Start from './Start';
 import Quiz from './Quiz';
 import Result from './Result';
-
-function App() {
+import {QuizData} from '../Api/index'
+function QuizeComp({id,token}) {
   // All Quizs, Current Question, Index of Current Question, Answer, Selected Answer, Total Marks
   const [quizs, setQuizs] = useState([]);
   const [question, setQuesion] = useState({});
@@ -18,11 +18,13 @@ function App() {
   const [showResult, setShowResult] = useState(false);
 
   // Load JSON Data
+
   useEffect(() => {
-    fetch('quiz.json')
-      .then(res => res.json())
-      .then(data => setQuizs(data))
-  }, []);
+    QuizData(id,token)
+      .then(res =>setQuizs(res?.data?.quiz))
+  }, [id,token]);
+
+  console.log("ddddddd",id,token)
 
   // Set a Single Question
   useEffect(() => {
@@ -45,7 +47,7 @@ function App() {
 
       if (selected === question.answer) {
         event.target.classList.add('bg-success');
-        setMarks(marks + 5);
+        setMarks(marks + 2);
       } else {
         event.target.classList.add('bg-danger');
       }
@@ -84,7 +86,6 @@ function App() {
     const rightBtn = document.querySelector('button.bg-success');
     rightBtn?.classList.remove('bg-success');
   }
-
   return (
     <>
       {/* Welcome Page */}
@@ -116,4 +117,4 @@ function App() {
   );
 }
 
-export default App;
+export default QuizeComp;
