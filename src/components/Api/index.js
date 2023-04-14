@@ -1,6 +1,6 @@
 import axios from'axios'
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://65.2.182.163';
 
 //Get All Movies
 export async function GetMovieList() {

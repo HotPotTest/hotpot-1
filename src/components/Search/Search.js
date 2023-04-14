@@ -16,7 +16,7 @@ const Search = () => {
         }
         await axios
       .get(
-        `http://localhost:8000/api/v1/movies/searchMovie?${text}`
+        `http://65.2.182.163/api/v1/movies/searchMovie?${text}`
       )
       .then((res) => {
         console.log("res",res.data?.data?.movies)
