@@ -22,7 +22,7 @@ import Popover from '@mui/material/Popover';
 import axios from 'axios';
 import {GetAnsByQuesionID} from '../Api/index'
 import CustomizedSnackbars from '../Toast/Toast'
-
+import moment from 'moment';
 import { useParams } from 'react-router-dom';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -102,7 +102,7 @@ const headers = {
 axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 axios.post(
-  '/api/v1/answer/postAnswer',
+  'https://hotpot-server.onrender.com/api/v1/answer/postAnswer',
   ans,headers
   ).then((res)=>{
   console.log(res)
@@ -124,7 +124,8 @@ axios.post(
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
-                  R
+                                          {(data?.quesopinions.firstName && data?.quesopinions.firstName)?.charAt(0)}
+
                 </Avatar>
               }
               action={
@@ -132,8 +133,8 @@ axios.post(
                   <MoreVertIcon />
                 </IconButton>
               }
-              title="Randive Omkar"
-              subheader="21-Feb-2023 11:00 PM"
+              title={data?.quesopinions?.firstName}
+              subheader={moment(data?.createdAt).format("MM-DD-yyyy hh:mm a")}
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
@@ -212,14 +213,15 @@ export default QuestionCard
 const AnsCard = ({AnsData,handleLike,like}) => {
   console.log("AnsData",AnsData)
 return(<>
-              { AnsData?.data && AnsData?.data?.answer && AnsData?.data?.answer?.length && AnsData?.data?.answer?.map((el)=>
+              { AnsData?.data && AnsData?.data?.answer && AnsData?.data?.answer?.length ?
+               AnsData?.data?.answer?.map((el)=>
                 <>
                 {el?.contentAns ?
                 <>
                   <CardHeader
                     avatar={
                       <Avatar sx={{ bgcolor: "#6a6363" }} aria-label="recipe">
-                        {(el?.answeredByWhichUser && el?.answeredByWhichUser[0]?.userName)?.charAt(0)}
+                        {(el?.answeredByWhichUser && el?.answeredByWhichUser?.firstName)?.charAt(0)}
                       </Avatar>
                     }
                     action={
@@ -227,8 +229,7 @@ return(<>
                         <MoreVertIcon />
                       </IconButton>
                     }
-                    title={el?.answeredByWhichUser && el?.answeredByWhichUser[0]?.userName}
-                    subheader="22-Feb-2023 01:49AM"
+                    title={el?.answeredByWhichUser && el?.answeredByWhichUser?.firstName}
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
@@ -245,6 +246,6 @@ return(<>
                   </CardActions>
                   <hr></hr>
                   </>
-:""}</>)} 
+:""}</>) :""} 
 </>)
 }

@@ -7,10 +7,7 @@ import { async } from '@firebase/util';
 import axios from 'axios';
 
 const Signup = ({openSignUpModal,handleClose,setShowMessage}) => {
-
-
     const validation = Yup.object({
-      
         email: Yup.string().email('Invalid email address').required('Required'),
         password: Yup.string().required('Password is required'),
     })
@@ -22,7 +19,7 @@ const Signup = ({openSignUpModal,handleClose,setShowMessage}) => {
         validationSchema: validation,
         onSubmit:async (values) => {
             try{
-                const data = await axios.post("api/v1/user/login",values).then((res)=>{
+                const data = await axios.post("https://hotpot-server.onrender.com/api/v1/user/login",values).then((res)=>{
                  console.log(res.data)
                  localStorage.setItem("user",JSON.stringify(res.data))
                  handleClose()
@@ -41,9 +38,6 @@ const Signup = ({openSignUpModal,handleClose,setShowMessage}) => {
         <div>
             <div><h2 style={{ textAlign: 'center' }}> Login </h2></div>
             <form onSubmit={formik.handleSubmit}>
-
-               
-                
                 <div className='mb-3'>
                     <TextField 
                      id="outlined-basic" 
@@ -65,6 +59,7 @@ const Signup = ({openSignUpModal,handleClose,setShowMessage}) => {
                      id="outlined-basic" 
                      label="Password"
                      name='password'
+                     type='password'
                      variant="outlined"
                      fullWidth size='small' 
                      onChange={formik.handleChange}

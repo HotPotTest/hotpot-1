@@ -26,7 +26,7 @@ const DetailPage = (props) => {
   }
   console.log(data)
 
-  let baseImgUrl = '/images/'
+  let baseImgUrl = 'https://hotpot-server.onrender.com/images/'
 //   let baseImgUrl = 'https://image.tmdb.org/t/p/original'
   console.log("data is not coming",data);
   const [value, setValue] = React.useState(0);

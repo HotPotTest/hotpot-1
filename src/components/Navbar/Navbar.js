@@ -43,7 +43,6 @@ const Navbar = () => {
     }
   }
   let user = JSON.parse(localStorage.getItem("user"))
-
   const checkIfLoggedIn = async () => {
     if (user) {
       setIsLoggedIn(true)    }
@@ -105,7 +104,7 @@ const Navbar = () => {
           <div className="dropdown">
             <Link className="link" to="/" >Home</Link>
           </div>
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <Link className="link" to="/recent">Recent</Link>
           </div>
           <div className="dropdown">
@@ -113,7 +112,7 @@ const Navbar = () => {
           </div>
           <div className="small">
             <Link to="/movies">Movies</Link>
-          </div>
+          </div> */}
         </div>
         <div className="nav-right">
           <Search />  

@@ -6,7 +6,7 @@ import axios from 'axios'
 import { Link, useParams } from 'react-router-dom'
 
 const Cards = ({ id, title, description, imageUrl, media_type, image}) => {
-    let baseImgUrl = "/images/"; // + imageUrl
+    let baseImgUrl = "https://hotpot-server.onrender.com/images/"; // + imageUrl
     // let baseImgUrl = "https://image.tmdb.org/t/p/original"; // + imageUrl
     const [data, setData] = useState({});
     const getData = async () => {

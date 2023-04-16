@@ -31,7 +31,7 @@ const Signup = ({openLoginModal,handleClose,setShowMessage}) => {
         validationSchema: validation,
         onSubmit:async (values) => {
             try{
-                const data = await axios.post("api/v1/user/signup",values).then((res)=>{
+                const data = await axios.post("https://hotpot-server.onrender.com/api/v1/user/signup",values).then((res)=>{
                  console.log(res.data)
                  handleClose()
                  openLoginModal()
@@ -103,6 +103,7 @@ const Signup = ({openLoginModal,handleClose,setShowMessage}) => {
                      id="outlined-basic" 
                      label="Password"
                      name='password'
+                     type='password'
                      variant="outlined"
                      fullWidth size='small' 
                      onChange={formik.handleChange}
@@ -119,6 +120,7 @@ const Signup = ({openLoginModal,handleClose,setShowMessage}) => {
                      id="outlined-basic" 
                      label="Confirm Password"
                      name='passwordConfirm'
+                     type='password'
                      variant="outlined"
                      fullWidth size='small' 
                      onChange={formik.handleChange}

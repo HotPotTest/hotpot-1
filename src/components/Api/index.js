@@ -26,8 +26,8 @@ export async function GetAnsByQuesionID({id}) {
 
 //LeaderBoard 
 
-export async function LeaderBoard() {
-  const { data } = await axios.get(`/api/v1/leaderboard`,{
+export async function LeaderBoard({id}) {
+  const { data } = await axios.get(`https://hotpot-server.onrender.com/api/v1/leaderboard/${id}`,{
     headers: {
       'Access-Control-Allow-Origin': true,
     },
@@ -36,10 +36,11 @@ export async function LeaderBoard() {
 }
 
 export async function QuizData(id,token) {
-  const { data } = await axios.get(`/api/v1/quiz/${id}`,{
+  const { data } = await axios.get(`https://hotpot-server.onrender.com/api/v1/quiz/${id}`,{
     headers: {
       'Authorization': 'Bearer ' +  token
     },
   });
   return data;
 }
+export {API_URL}

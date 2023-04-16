@@ -8,8 +8,8 @@ const Card = ({path,title,image}) => {
   return (
     <>
         <div className="smalldiv">
-            <img height="70px" width="140px" src={image ? baseImgUrl + image : 'https://dummyimage.com/100'}/>
-            <h1>{title}</h1>
+            <img height="50px" width="100px" src={image ? baseImgUrl + image : 'https://dummyimage.com/100'}/>
+            <h6 className=''>{title}</h6>
         </div>
     </>
   )

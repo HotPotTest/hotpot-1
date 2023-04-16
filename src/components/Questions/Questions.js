@@ -62,7 +62,7 @@ export const Questions = ({row_title}) => {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     axios.post(
-      `/api/v1/movies/${id}/postQues`,
+      `https://hotpot-server.onrender.com/api/v1/movies/${id}/postQues`,
       ans,headers
       ).then((res)=>{
       console.log(res)

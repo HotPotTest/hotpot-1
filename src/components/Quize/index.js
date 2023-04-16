@@ -3,7 +3,10 @@ import Start from './Start';
 import Quiz from './Quiz';
 import Result from './Result';
 import {QuizData} from '../Api/index'
-function QuizeComp({id,token}) {
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import {API_URL} from '../Api/index'
+function QuizeComp({id,token,user_id,handleClose}) {
   // All Quizs, Current Question, Index of Current Question, Answer, Selected Answer, Total Marks
   const [quizs, setQuizs] = useState([]);
   const [question, setQuesion] = useState({});
@@ -18,7 +21,6 @@ function QuizeComp({id,token}) {
   const [showResult, setShowResult] = useState(false);
 
   // Load JSON Data
-
   useEffect(() => {
     QuizData(id,token)
       .then(res =>setQuizs(res?.data?.quiz))
@@ -66,7 +68,19 @@ function QuizeComp({id,token}) {
   }
 
   // Show Result
+  const submitAnswer = async () => {
+    const values = {
+      movieId:id,
+      userId:user_id,
+      coins:marks,
+      correctAns: marks == 0 ? 0 : marks/2
+    }
+   const data  = await axios.post(API_URL + `/api/v1/leaderboard/`,values).then((res)=>{
+    console.log(res)
+   })
+  }
   const showTheResult = () => {
+    submitAnswer()
     setShowResult(true);
     setShowStart(false);
     setShowQuiz(false);
@@ -112,7 +126,8 @@ function QuizeComp({id,token}) {
         showResult={showResult}
         quizs={quizs}
         marks={marks}
-        startOver={startOver} />
+
+        handleClose={handleClose} />
     </>
   );
 }

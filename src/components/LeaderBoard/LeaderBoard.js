@@ -1,18 +1,31 @@
 import React,{useState,useEffect} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal,Grid } from '@mui/material';
+import { Box, Button, Modal,Grid,Typography } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { LeaderBoard } from '../Api';
 import { useParams } from 'react-router-dom'
 import CustomizedSnackbars from '../Toast/Toast'
-
+import moment from 'moment/moment';
 import Quize from '../Quize/index'
 const columns = [
-  { field: 'id', headerName: 'ID',width:100 },
-  { field: 'userName', headerName: 'Users',width:200},
-  { field: 'correct_answers', headerName: 'Correct Answers', type: 'number',width:200},
+  { field: 'userName', headerName: 'Users',width:200,
+  renderCell: (params) => {
+   return (
+    <Typography variant="subtitle2">
+      {params.row.userId.firstName}
+    </Typography>
+  )}},
+  { field: 'correctAns', headerName: 'Correct Answers', type: 'number',width:200},
   { field: 'coins', headerName: 'Coins Win',width:100 },
-  { field: 'time_stamp', headerName: 'Played On',width:300},
+  { field: 'timeStamp', headerName: 'Played On',width:300 ,
+  renderCell: (params) => {
+    console.log(params.row.timeStamp)
+   return (
+    <Typography variant="subtitle2">
+      {moment(params.row.timeStamp).format("DD/MM/YYYY hh:mm A")}
+    </Typography>
+  )}
+},
 ];
 
 const rows = [
@@ -72,9 +85,9 @@ const LeaderBoardComp = ({row_title}) => {
       }
     };
     const GetLeaderBoard = () => {
-      LeaderBoard().then((res)=>{
+      LeaderBoard({id}).then((res)=>{
         console.log( "res",res.data)
-        setRows(res.data?.leaderBoards)
+        setRows(res.data?.leaderBoard)
       })
     }
     useEffect(()=>{
@@ -98,7 +111,7 @@ const LeaderBoardComp = ({row_title}) => {
         <DataGrid
             rows={Rows}
             columns={columns}
-            pageSize={5}
+            pageSize={20}
             getRowId={(row) => row._id}
             rowsPerPageOptions={[5]}
         />
@@ -113,7 +126,7 @@ const LeaderBoardComp = ({row_title}) => {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={{ ...style,}}>
-                <Quize id={id} token={user?.token}/>
+                <Quize id={id} token={user?.token} user_id ={user?.data?.user?._id} handleClose={handleClose} />
                 </Box>
             </Modal>
             {showMessage.visible && (
